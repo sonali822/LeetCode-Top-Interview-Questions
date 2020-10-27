@@ -1,0 +1,65 @@
+class Solution {
+    public String minWindow(String s, String t) {
+  String ans = "";
+        
+//second string ka hai map2
+HashMap<Character,Integer>map2 = new HashMap<>();
+        for(int i=0;i<t.length();i++){
+            char ch = t.charAt(i);
+            map2.put(ch,map2.getOrDefault(ch,0)+1);
+            
+        }
+        //match count
+        int mcount=0;
+        //desired match count
+        int dcount =t.length();
+        
+        
+     HashMap<Character,Integer>map1 = new HashMap<>();   
+        
+  int i=-1;
+int j =-1;
+        while(true){
+            boolean f1 = false;
+            boolean f2 = false;
+            //acquire
+        if(i<s.length()-1 && mcount<dcount){
+            //aquire karte rahe
+            i++;
+            char ch = s.charAt(i);
+            //frequency badani hai
+            map1.put(ch,map1.getOrDefault(ch,0)+1);
+            //agar aquire karke frequency jada hogai tab kisi kam ka nahi hai
+            //aquire karne ke bad gar choti h ya barabr hai to kam ka bnda aquire kiya otherwise kam ka ni h
+            if(map1.getOrDefault(ch,0)<=map2.getOrDefault(ch,0)){
+                mcount++;
+            }
+            f1 = true;
+        }    
+            // collect answers and release
+            //j i se kam chlna chahyie and 
+            while(j<i && mcount==dcount){
+                //sabse pahle potential ans collect kare
+                String potans = s.substring(j+1,i+1);
+                if(ans.length()==0 || potans.length()<ans.length()){
+                    ans=potans;
+                    
+                }
+                j++;
+                char ch = s.charAt(j);
+                if(map1.get(ch)==1){
+                    map1.remove(ch);
+                }else{
+                    map1.put(ch,map1.get(ch)-1);
+                }
+                if(map1.getOrDefault(ch,0)<map2.getOrDefault(ch,0)){
+                    mcount--;
+                }
+               f2 = true; 
+            }
+            if(f1==false && f2==false)break;
+        }
+ 
+  return ans;      
+    }
+}
